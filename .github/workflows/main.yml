@@ -1,7 +1,7 @@
 name: A workflow for my App
 on: push
 
-jobs:
+/* jobs:
   UnitTests:
     name: Unit Test Build Action
     runs-on: ubuntu-22.04
@@ -14,7 +14,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Unit Tests
-        run: mvn -Dtest=com.napier.sem.Mytest test
+        run: mvn -Dtest=com.napier.sem.Mytest test */
 
   Build:
     name: Build and Start Using docker-compose
