@@ -14,7 +14,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Unit Tests
-        run: mvn -Dtest=com.napier.sem test
+        run: mvn -Dtest=com.napier.sem.Mytest test
 
   Build:
     name: Build and Start Using docker-compose
@@ -32,4 +32,4 @@ jobs:
           mvn package -DskipTests
           docker compose up --abort-on-container-exit
       - name: view logs
-        run: docker logs SET08103
+        run: docker logs set08103-app-1
