@@ -6,7 +6,7 @@
 
     <groupId>com.napier.sem</groupId>
     <artifactId>SET08103</artifactId>
-    <version>0.1.0.3</version>
+    <version>0.1.0.4</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,6 +19,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -60,6 +67,24 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <!--                <version>2.19.1</version>-->
+                <version>3.5.4</version>
+                <!--                <dependencies>-->
+                <!--                    <dependency>-->
+                <!--                        <groupId>org.junit.platform</groupId>-->
+                <!--                        <artifactId>junit-platform-surefire-provider</artifactId>-->
+                <!--                        <version>1.1.0</version>-->
+                <!--                    </dependency>-->
+                <!--                    <dependency>-->
+                <!--                        <groupId>org.junit.jupiter</groupId>-->
+                <!--                        <artifactId>junit-jupiter-engine</artifactId>-->
+                <!--                        <version>5.1.0</version>-->
+                <!--                    </dependency>-->
+                <!--                </dependencies>-->
             </plugin>
         </plugins>
     </build>
