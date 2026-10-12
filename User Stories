@@ -1,0 +1,152 @@
+User story: As a user and member of the organisation I want a functionality that allows for me to sort all of the countries in the world via their population size from largest so smallest
+
+Use Case: Sort all countries based on population size
+Goal in context:Sort all countries in the world from largest to smallest
+Scope & Level: Primary task
+Preconditions: An SQL file / access to a database containing the information on countries and their populations.
+Sucecess End Condition: a complete list of every country in the world based on their population size with a numbered order that the user can recieve.
+Failed End Condtion: Failure to interact with the list or improper ordering of that list, ie missing countries or countries being listed wrong.
+Primary, Secondary Actors: Primary requesting user
+Trigger: CountryPopulation
+Description:
+	step 1:
+Subvariations:
+	1: countries by continent
+	2: countries by region
+
+
+User Story: As a user and member of the organisation I want a functionality that allows for me to view the top populated countries in the world where I decide the amount I'd like to see from largest to smallest
+
+Use Case: Sort all countries of a user inputed ranking ranking based on population ranking.
+goal in context: sort all countries in the world by N where N is the value provided by a user from largest to smallest
+Scope & level: Primary task
+Preconditions: An SQL file / access to a database containing the information on countries and their population.
+Success End condition: a complete list of every country in the world according to the value provided by the user that they can then recieve. Functionality that allows the user to send an integer value to the system.
+failed end condition: Failure to interact with the lost or an improper ordering of that list, ie missing countries or countries being listed wrong. 
+Primary, Secondary Actors: Primary requesting user
+Trigger: CountryPopulationUser
+Description:
+	step 1:
+Subvariations:
+	1:top populated countries in the world ranked via user input based on continents
+	2: top populated countries in the world ranked via user input based on regions.
+
+User story: As a user and member of the organisation I want a functionality that allows for me to sort all of the cities of the world via their population size from largest to smallest
+
+Use Case: Sort all cities based on population size.
+Goal in context: Sort all of the cities in the world based on population size from largest to smallest
+Scope and Level: Primary task
+Preconditions: An SQL file / Access to a database containing the information on cities and their populations.
+Sucess End COndition: a complete list of every city in the world written in numbered order based on population size largest to smallest.
+Failed end condition: Failure to interact with the list or improper ordering of that list, ie missing countries or countries being listed wrong. 
+Primary, Secondary Actors: Primary, user.
+Trigger: CityPopulation
+Description:
+	step 1:
+Subvariations:
+	1: Cities by continent
+	2: cities by region
+	3: cities by country
+	4: cities by district.
+
+User story: as a user and member of the organisation I want a functionality that allows me to view the top populated countries in the world and choose how many I see from largest to smallest
+
+Use case: Sort all cities in the world by chosen amount
+Goal in context: Sort all cities in the world according to top N where N is a value given by the user from largest to smallest
+Scope and Level: Primary Task
+Preconditions: An SQL file / access to a database containing the information on cities and their population.
+Success End condition: a complete list of every country in the world according to the value provided by the user that they can then recieve. Functionality that allows the user to send an integer value to the system.
+Success End Condition: User can view an ordered list numbered at the value that they have sent with proper ordering of cities in the world.
+Failed end condition: Failure to interact with the list or an improper ordering of that list, ie missing countries or countries being listed incorrectly.
+Primary, Secondary Actors: Primary requesting user.
+Trigger: CityPopulationUser
+Description:
+	step 1:
+Subvarations:
+	1:top populated cities in the world by continent
+	2: top populated cities in the world by region
+	3: top populated cities in the world by country
+	4: top populated cities in the world by district
+
+User story: As a user and member of the organisation I want a functionality that allows for me to view all of the capital cities in the world based on their population from largest to smallest
+
+Use case: Sort all of the capital cites in the world via their population.
+Goal in context: Sort all capital cities in the world based on their population size from largest to smallest
+Scope and Level: Primary Task
+Preconditions: An SQL file / acess to a database containing the information on city capitals and their population.
+Sucess End condition: out put of a complete list of every capital city ordered by their population size largest to smallest.
+Failed end condition: An error during processing or an improper list ie ordered incorrectly or missing members.
+Primary, Secondary Actors: Primary, User
+Trigger:CapCityPopulation
+Description:
+	Step 1:
+Subvarations:
+	1: Capital cities in a continent
+	2: Capital cities in a region
+
+User story: As a user and member of the organisation I want a functionality that allows for me to view all of the capital cities in the world with a limited ranking decided by me. I want to see them from largest to smallest
+
+Use case: sort all of the top populated capital cities in the world according to user
+Goal in context: sort all cities in the world according to Top N where is N is a value provided by the user. 
+Scope and Level: primary task
+preconditions: An SQL file / Access to database containing the information on city capitals and their population. Functionality to allow the user to input an integer valuel.
+Success End Condition: output a complete list of the top ranked cities in the world by population from largest to smallest where the length of ranking is decided by the user.
+Failed end condition: An error from the system or an improper list being produced by the end ie missing members or listed incorrectly.
+Primary, Secondary Actors: Primary, user
+Trigger: CapCityPopulationN
+Description:
+	Step 1:
+Subvariations:
+	Capital cities in a continent with User decided length
+	capital cities in a region with user decided length
+
+User story: as a user and member of the organisation I want a functionality that allows for me to view the population of all people living in a city and not living a city in each continent. 
+
+Use case: sort all listed populations into either living in a city or not living in a city
+Goal incontext: Sort all people living in a city into one listed population and all people living out of cities into another listed population by continent.
+Scope and Level: primary task
+Preconditions: An SQL file / access to a database containing the population information of all of the continents and whether the people living there live within a city or out of one.
+success end condition: out put a complete list of continents with the amount people living within a city in a continent and all of the people who are not living in a city within that same continent
+Failed end condition: An error from the system or an improper list being produced by the end ie not properly sorting people according to where they live or missing listed people out in the database.
+Primary, Secondary actors: Primary, User
+Trigger: WhetherPopulationCity
+Description:
+	Step 1:
+Subvariations:
+	1: The population of people living in and out of cities in each region
+	2: The population of people living in and out of cities in each country
+
+User story: as a user I want the functionality to view the population of the world.
+
+Use case: output the amount of people living in the world
+goal in context: List the combined population of every country in the world via the database
+Scope and LeveL: primary task
+Preconditions: An SQL file/ access to database containing the population information of every country in the world.
+successful end condition: output the correct number of people living in the world.
+Failed end condition: Error from the system or output the incorrect number of people living in the world
+Trigger: WorldPopulation
+Description:
+	Step 1:
+Subvariations:
+	1: The population of a continent
+	2: the population of a region
+	3: the population of a country
+	4: the population of a district
+	5: the population of a city
+
+User story: as a user I want a functionality that allows for me to view the amount of people in the world who speak Chinese compared to the rest of the world
+
+Usecase: output the amount of chinese speakers in the world compared to the rest of the world
+Goal in context: Create/filter for a list of all of the chinese speakers in the world then output the percentage of that compared to world population.
+scope and level: primary task
+preconditions: An SQL file / access to database containing the amount of Chinese speakers in the world and a list of the population who both do and dont.
+Succesful end condition: Output the correct amount of chinese speakers in the world and the population compared to the rest of hte world
+failed end condition: Erorr from the system or an incorrect percentage.
+Trigger: WorldSpeakersChinese
+Description: 
+	Step 1:
+Subvariations:
+	1: The amount of english speakers compared to the population of the world
+	2: the amount of Hindi speakers compared to the population of the world
+	3: the amount of Spanish speakers compared to the population of the world
+	4: the amount of Arabic speakers compared to the population of the world. 
