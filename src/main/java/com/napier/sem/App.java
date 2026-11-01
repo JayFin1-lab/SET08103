@@ -1,7 +1,7 @@
 package com.napier.sem;
 
 import java.sql.*;
-
+import java.util.ArrayList;
 public class App
 {
     public static void main(String[] args)
@@ -45,7 +45,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:33060/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -79,4 +79,38 @@ public class App
             }
         }
     }
+    public ArrayList<City> getTopNCitiesInDistrict(String district, int n) {
+        ArrayList<City> cities = new ArrayList<>();
+
+        if (district == null || district.isBlank() || n <= 0) {
+            return cities;
+        }
+
+        String sql = "SELECT ID, Name, CountryCode, District, Population "
+                + "FROM city WHERE District = ? "
+                + "ORDER BY Population DESC, ID ASC LIMIT ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, district);
+            stmt.setInt(2, n);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    City city = new City(
+                            rs.getLong("ID"),
+                            rs.getString("Name"),
+                            rs.getString("CountryCode"),
+                            rs.getString("District"),
+                            rs.getLong("Population")
+                    );
+                    cities.add(city);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting top cities in district: " + e.getMessage());
+        }
+
+        return cities;
+    }
+
 }
