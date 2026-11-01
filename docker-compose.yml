@@ -4,6 +4,8 @@ services:
   # Build app from Dockerfile in same folder
   app:
     build: .
+    environment:
+      DB_URL: jdbc:mysql://db:3306/world?useSSL=false&allowPublicKeyRetrieval=true
 
   # Build the db as name db from the Dockerfile in the db folder
   # exposing the port if we want to run code outside a container
