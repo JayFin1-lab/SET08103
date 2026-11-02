@@ -40,7 +40,7 @@ public class App
         // Disconnect from database
         a.disconnect();
     }
-
+//
     private static void show(String title, ArrayList<?> items) {
         System.out.println();
         System.out.println("===" + title + " ===");
