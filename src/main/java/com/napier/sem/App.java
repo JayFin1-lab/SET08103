@@ -15,16 +15,16 @@ public class App
 
         // All countries, listed in order from population largest to smallest
         ArrayList<Country> countries = a.getCountries();
-        for (Country c : countries)
+        for (Country current_country : countries) //this is cycling through the current row, hence name "current"
         {
-            System.out.println(c);
+            System.out.println(current_country);
         }
 
         // All cities, order population largest to smallest
         ArrayList<City> cities = a.getCities();
-        for (City ci : cities)
+        for (City current_city : cities)
         {
-            System.out.println(ci);
+            System.out.println(current_city);
         }
         // Disconnect from database
         a.disconnect();
@@ -93,22 +93,21 @@ public class App
             }
         }
     }
-    /**
-     * Gets all countries in the world, largest population first.
-     */
+    // set up method, takes no args, return country obj from Country.java
     public ArrayList<Country> getCountries()
     {
-        ArrayList<Country> countries = new ArrayList<>();
+        ArrayList<Country> countries = new ArrayList<>(); //just creates an empty list
 
+        //using SQL language, constructing a query
         String sql = "SELECT country.Code, country.Name, country.Continent, country.Region, "
                 + "country.Population, city.Name AS Capital "
                 + "FROM country LEFT JOIN city ON country.Capital = city.ID "
                 + "ORDER BY country.Population DESC";
 
-        try (PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery())
+        try (PreparedStatement query = con.prepareStatement(sql); //con = connect to db, query gets ready to send
+             ResultSet rs = query.executeQuery()) // returns rows (rs)
         {
-            while (rs.next())
+            while (rs.next()) //this is just going row by row
             {
                 countries.add(new Country(
                         rs.getString("Code"),
@@ -127,9 +126,7 @@ public class App
         return countries;
     }
 
-    /**
-     * Gets all cities in the world, largest population first.
-     */
+    // same as our country method, create list, build query, connect to database, run query
     public ArrayList<City> getCities()
     {
         ArrayList<City> cities = new ArrayList<>();
@@ -137,8 +134,8 @@ public class App
         String sql = "SELECT ID, Name, CountryCode, District, Population "
                 + "FROM city ORDER BY Population DESC";
 
-        try (PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery())
+        try (PreparedStatement query = con.prepareStatement(sql);
+             ResultSet rs = query.executeQuery())
         {
             while (rs.next())
             {
