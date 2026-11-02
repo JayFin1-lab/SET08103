@@ -13,26 +13,57 @@ public class App
         // Connect to database
         a.connect();
 
-        // All countries, listed in order from population largest to smallest
-        ArrayList<Country> countries = a.getCountries();
-        for (Country current_country : countries) //this is cycling through the current row, hence name "current"
-        {
-            System.out.println(current_country);
-        }
+        Connection con = a.getConnection();
 
-        // All cities, order population largest to smallest
-        ArrayList<City> cities = a.getCities();
-        for (City current_city : cities)
-        {
-            System.out.println(current_city);
-        }
+        // All countries, listed in order from population largest to smallest
+        count("All countries, world",                Country.getCountries(con,0));
+        count("All countries, continent",            Country.getByContinent(con,"Europe", 0));
+        count("All countries, region",               Country.getByRegion(con,"Caribbean", 0));
+
+        show("Top N countries (10), world",          Country.getCountries(con,10));
+        show("Top N countries (8), Asia",            Country.getByContinent(con,"Asia", 8));
+        show("Top N countries (6), South America",   Country.getByRegion(con,"South America", 6));
+
+        // All cities, listed in order from population largest to smallest
+        count("All cities, world",               City.getCities(con,0));
+        count("All cities, continent",           City.getByContinent(con,"Europe", 0));
+        count("All cities, region",              City.getByRegion(con,"West Africa", 0));
+        count("All cities, country",             City.getByCountry(con,"Brazil", 0));
+        count("All cities, district",            City.getByDistrict(con,"Nevada", 0));
+
+        show("Top N cities (11), world",         City.getCities(con,11));
+        show("Top N cities (9), continent",      City.getByContinent(con,"Asia",9));
+        show("Top N cities (7), region",         City.getByRegion(con,"North Africa", 7));
+        show("Top N cities (5), country",        City.getByCountry(con,"Germany", 5));
+        show("Top N cities (3), district",       City.getByDistrict(con,"Inner Mongolia", 3));
+
         // Disconnect from database
         a.disconnect();
+    }
+
+    private static void show(String title, ArrayList<?> items) {
+        System.out.println();
+        System.out.println("===" + title + " ===");
+        for (Object item : items) {
+            System.out.println(item);
+        }
+    }
+
+    private static void count(String title, ArrayList<?> items) {
+        System.out.println();
+        System.out.println("=== " + title + ": " + items.size() + " rows ===");
+        if (!items.isEmpty()) {
+            System.out.println("First: " + items.get(0));
+        }
     }
     /**
      * Connection to MySQL database.
      */
     private Connection con = null;
+
+    public Connection getConnection() {
+        return con;
+    }
 
     /**
      * Connect to the MySQL database.
@@ -92,67 +123,6 @@ public class App
                 System.out.println("Error closing connection to database");
             }
         }
-    }
-    // set up method, takes no args, return country obj from Country.java
-    public ArrayList<Country> getCountries()
-    {
-        ArrayList<Country> countries = new ArrayList<>(); //just creates an empty list
-
-        //using SQL language, constructing a query
-        String sql = "SELECT country.Code, country.Name, country.Continent, country.Region, "
-                + "country.Population, city.Name AS Capital "
-                + "FROM country LEFT JOIN city ON country.Capital = city.ID "
-                + "ORDER BY country.Population DESC";
-
-        try (PreparedStatement query = con.prepareStatement(sql); //con = connect to db, query gets ready to send
-             ResultSet rs = query.executeQuery()) // returns rows (rs)
-        {
-            while (rs.next()) //this is just going row by row
-            {
-                countries.add(new Country(
-                        rs.getString("Code"),
-                        rs.getString("Name"),
-                        rs.getString("Continent"),
-                        rs.getString("Region"),
-                        rs.getLong("Population"),
-                        rs.getString("Capital")));
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("Error getting countries: " + e.getMessage());
-        }
-
-        return countries;
-    }
-
-    // same as our country method, create list, build query, connect to database, run query
-    public ArrayList<City> getCities()
-    {
-        ArrayList<City> cities = new ArrayList<>();
-
-        String sql = "SELECT ID, Name, CountryCode, District, Population "
-                + "FROM city ORDER BY Population DESC";
-
-        try (PreparedStatement query = con.prepareStatement(sql);
-             ResultSet rs = query.executeQuery())
-        {
-            while (rs.next())
-            {
-                cities.add(new City(
-                        rs.getLong("ID"),
-                        rs.getString("Name"),
-                        rs.getString("CountryCode"),
-                        rs.getString("District"),
-                        rs.getLong("Population")));
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("Error getting cities: " + e.getMessage());
-        }
-
-        return cities;
     }
 }
 
