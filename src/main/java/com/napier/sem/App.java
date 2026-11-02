@@ -1,6 +1,7 @@
 package com.napier.sem;
 
 import java.sql.*;
+import java.util.ArrayList;   //Implemented by teammate, presumably used for lists
 
 public class App
 {
@@ -12,6 +13,19 @@ public class App
         // Connect to database
         a.connect();
 
+        // All countries, listed in order from population largest to smallest
+        ArrayList<Country> countries = a.getCountries();
+        for (Country c : countries)
+        {
+            System.out.println(c);
+        }
+
+        // All cities, order population largest to smallest
+        ArrayList<City> cities = a.getCities();
+        for (City ci : cities)
+        {
+            System.out.println(ci);
+        }
         // Disconnect from database
         a.disconnect();
     }
@@ -44,8 +58,8 @@ public class App
             {
                 // Wait a bit for db to start
                 Thread.sleep(30000);
-                // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
+                // Connect to database, updated
+                con = DriverManager.getConnection("jdbc:mysql://localhost:33060/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -79,4 +93,70 @@ public class App
             }
         }
     }
+    /**
+     * Gets all countries in the world, largest population first.
+     */
+    public ArrayList<Country> getCountries()
+    {
+        ArrayList<Country> countries = new ArrayList<>();
+
+        String sql = "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                + "country.Population, city.Name AS Capital "
+                + "FROM country LEFT JOIN city ON country.Capital = city.ID "
+                + "ORDER BY country.Population DESC";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                countries.add(new Country(
+                        rs.getString("Code"),
+                        rs.getString("Name"),
+                        rs.getString("Continent"),
+                        rs.getString("Region"),
+                        rs.getLong("Population"),
+                        rs.getString("Capital")));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error getting countries: " + e.getMessage());
+        }
+
+        return countries;
+    }
+
+    /**
+     * Gets all cities in the world, largest population first.
+     */
+    public ArrayList<City> getCities()
+    {
+        ArrayList<City> cities = new ArrayList<>();
+
+        String sql = "SELECT ID, Name, CountryCode, District, Population "
+                + "FROM city ORDER BY Population DESC";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                cities.add(new City(
+                        rs.getLong("ID"),
+                        rs.getString("Name"),
+                        rs.getString("CountryCode"),
+                        rs.getString("District"),
+                        rs.getLong("Population")));
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Error getting cities: " + e.getMessage());
+        }
+
+        return cities;
+    }
 }
+
+
