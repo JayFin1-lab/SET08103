@@ -58,8 +58,11 @@ public class App
             {
                 // Wait a bit for db to start
                 Thread.sleep(30000);
-                // Connect to database, updated
-                con = DriverManager.getConnection("jdbc:mysql://localhost:33060/world?useSSL=false&allowPublicKeyRetrieval=true", "root", "example");
+                // Connect to database, updated the connection (unreliably connected previously??)
+                con = DriverManager.getConnection(
+                        System.getenv().getOrDefault("DB_URL",
+                                "jdbc:mysql://localhost:33060/world?useSSL=false&allowPublicKeyRetrieval=true"),
+                        "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
