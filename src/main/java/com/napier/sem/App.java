@@ -10,9 +10,8 @@ public class App
         // Create new Application
         App a = new App();
 
-        // Connect to database
-        a.connect();
 
+        //establishes live connection
         Connection con = a.getConnection();
 
         // All countries, listed in order from population largest to smallest
@@ -27,15 +26,15 @@ public class App
         // All cities, listed in order from population largest to smallest
         count("All cities, world",               City.getCities(con,0));
         count("All cities, continent",           City.getByContinent(con,"Europe", 0));
-        count("All cities, region",              City.getByRegion(con,"West Africa", 0));
+        count("All cities, region",              City.getByRegion(con,"North America", 0));
         count("All cities, country",             City.getByCountry(con,"Brazil", 0));
         count("All cities, district",            City.getByDistrict(con,"Nevada", 0));
 
         show("Top N cities (11), world",         City.getCities(con,11));
         show("Top N cities (9), continent",      City.getByContinent(con,"Asia",9));
-        show("Top N cities (7), region",         City.getByRegion(con,"North Africa", 7));
+        show("Top N cities (7), region",         City.getByRegion(con,"Southern Europe", 7));
         show("Top N cities (5), country",        City.getByCountry(con,"Germany", 5));
-        show("Top N cities (3), district",       City.getByDistrict(con,"Inner Mongolia", 3));
+        show("Top N cities (4), district",       City.getByDistrict(con,"Inner Mongolia", 4));
 
         // Disconnect from database
         a.disconnect();
@@ -62,14 +61,15 @@ public class App
     private Connection con = null;
 
     public Connection getConnection() {
-        return con;
+        return connect();
     }
 
     /**
      * Connect to the MySQL database.
      */
-    public void connect()
+    public Connection connect()
     {
+        Connection con = null;
         try
         {
             // Load Database driver
@@ -104,6 +104,7 @@ public class App
                 System.out.println("Thread interrupted? Should not happen.");
             }
         }
+        return con;
     }
 
     /**

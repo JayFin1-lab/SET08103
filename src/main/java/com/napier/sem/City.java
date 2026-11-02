@@ -68,7 +68,7 @@ public class City {
         return query(con, "WHERE country.Name = ? ", countryName, limit);
     }
     public static ArrayList<City> getByDistrict(Connection con, String district, int limit) {
-        return query(con, "WHERE country.Region = ? ", district, limit);
+        return query(con, "WHERE city.District = ? ", district, limit);
     }
 
     //Runs the country query. "Where" is empty for the whole world

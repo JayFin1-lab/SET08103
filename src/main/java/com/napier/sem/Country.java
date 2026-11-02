@@ -62,8 +62,10 @@ public class Country {
     private static ArrayList<Country> query(Connection con, String where, String value, int limit) {
         ArrayList<Country> countries = new ArrayList<>();
 
-        String sql = "SELECT country.code, country.Name, country.Continent, country.Region, "
-                + "country.Population, city.name AS Capital " + where
+        String sql = "SELECT country.Code, country.Name, country.Continent, country.Region, "
+                + "country.Population, city.Name AS Capital "
+                + "FROM country LEFT JOIN city ON country.Capital = city.ID "
+                + where
                 + "ORDER BY country.Population DESC "
                 + (limit > 0 ? "LIMIT ?" : "");
         try (PreparedStatement query = con.prepareStatement(sql)) {
