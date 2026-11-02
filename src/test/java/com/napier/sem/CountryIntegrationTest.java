@@ -11,7 +11,8 @@ public class CountryIntegrationTest {
         App app = new App();
         try {
             app.connect();
-            ArrayList<Country> countries = app.getCountries();
+          ArrayList<Country> countries =
+    Country.getCountries(app.getConnection(), 0);
             assertNotNull(countries);
             assertFalse(countries.isEmpty());
         } finally {
