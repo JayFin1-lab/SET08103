@@ -20,8 +20,8 @@ public class App
         count("All countries, region",               Country.getByRegion(con,"Caribbean", 0));
 
         show("Top N countries (10), world",          Country.getCountries(con,10));
-        show("Top N countries (8), Asia",            Country.getByContinent(con,"Asia", 8));
-        show("Top N countries (6), South America",   Country.getByRegion(con,"South America", 6));
+        show("Top N countries (8), continent",            Country.getByContinent(con,"Asia", 8));
+        show("Top N countries (6), region",   Country.getByRegion(con,"South America", 6));
 
         // All cities, listed in order from population largest to smallest
         count("All cities, world",               City.getCities(con,0));
@@ -35,6 +35,14 @@ public class App
         show("Top N cities (7), region",         City.getByRegion(con,"Southern Europe", 7));
         show("Top N cities (5), country",        City.getByCountry(con,"Germany", 5));
         show("Top N cities (4), district",       City.getByDistrict(con,"Inner Mongolia", 4));
+
+        count("All cities, world",               CapitalCity.getCountries(con,0));
+        count("All cities, continent",           CapitalCity.getContinent(con,"Europe", 0));
+        count("All cities, region",              CapitalCity.getRegion(con,"North America", 0));
+
+        show("Top N cities (5), world",         CapitalCity.getCountries(con,5));
+        show("Top N cities (4), continent",      CapitalCity.getContinent(con,"Asia",4));
+        show("Top N cities (3), region",         CapitalCity.getRegion(con,"Southern Europe", 3));
 
         // Disconnect from database
         a.disconnect();
