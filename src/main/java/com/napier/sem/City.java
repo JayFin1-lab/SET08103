@@ -52,21 +52,23 @@ public class City {
                 '}';
     }
 
-    // All countries in the world (limit 0), or the top N.
+    // All cities in the world (limit 0), or the top N.
     public static ArrayList<City> getCities(Connection con, int limit) {
         return query(con, "", null, limit);
     }
-    /** Countries in a continent, e.g. "Europe". */
+    // Cities in a continent, e.g. "Europe", or the top N.
     public static ArrayList<City> getByContinent(Connection con, String continent, int limit) {
         return query(con, "WHERE country.Continent = ? ", continent, limit);
     }
-    /** Countries in a region, e.g. "Caribbean". */
+    // Cities in a region, e.g. "Caribbean", or the top N.
     public static ArrayList<City> getByRegion(Connection con, String region, int limit) {
         return query(con, "WHERE country.Region = ? ", region, limit);
     }
+    // Cities in a country, or the top N.
     public static ArrayList<City> getByCountry(Connection con, String countryName, int limit) {
         return query(con, "WHERE country.Name = ? ", countryName, limit);
     }
+    // Cities in a district, or
     public static ArrayList<City> getByDistrict(Connection con, String district, int limit) {
         return query(con, "WHERE city.District = ? ", district, limit);
     }
