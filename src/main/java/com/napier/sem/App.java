@@ -44,6 +44,12 @@ public class App
         show("Top N cities (4), continent",      CapitalCity.getContinent(con,"Asia",4));
         show("Top N cities (3), region",         CapitalCity.getRegion(con,"Southern Europe", 3));
 
+        show("Top Chinese Speaking Countries, world", CountryLanguage.getLanguage(con, "Chinese", 0));
+        show("Top English Speaking Countries, world", CountryLanguage.getLanguage(con, "English", 0));
+        show("Top Hindi Speaking Countries, world", CountryLanguage.getLanguage(con, "Hindi", 0));
+        show("Top Spanish Speaking Countries, world", CountryLanguage.getLanguage(con, "Spanish", 0));
+        show("Top Arabic Speaking Countries, world", CountryLanguage.getLanguage(con, "Arabic", 0));
+
         // Disconnect from database
         a.disconnect();
     }
