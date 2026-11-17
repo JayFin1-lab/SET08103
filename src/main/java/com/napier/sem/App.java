@@ -2,7 +2,13 @@ package com.napier.sem;
 
 import java.sql.*;
 import java.util.ArrayList;   //Implemented by teammate, presumably used for lists
+/*
+Three steps here:
 
+1. Connect to the world.sql database.
+2. Ask Country,City, CapitalCity, PopCityNoCity classes to run their reports, print results.
+3. Disconnect from the database.
+ */
 public class App
 {
     public static void main(String[] args)
@@ -14,7 +20,15 @@ public class App
         //establishes live connection
         Connection con = a.getConnection();
 
-        // All countries, listed in order from population largest to smallest
+
+        /*
+        Naming conventions for reports:
+         limit 0 = all rows, limit N = Top N rows.
+         count() is used for all the long "all" reports (prints row count and first row)
+         show() is used for short "top N" reports and prints every row.
+         */
+
+        // Country reports
         count("All countries, world",                Country.getCountries(con,0));
         count("All countries, continent",            Country.getByContinent(con,"Europe", 0));
         count("All countries, region",               Country.getByRegion(con,"Caribbean", 0));
@@ -23,7 +37,7 @@ public class App
         show("Top N countries (8), continent",            Country.getByContinent(con,"Asia", 8));
         show("Top N countries (6), region",   Country.getByRegion(con,"South America", 6));
 
-        // All cities, listed in order from population largest to smallest
+        // City reports
         count("All cities, world",               City.getCities(con,0));
         count("All cities, continent",           City.getByContinent(con,"Europe", 0));
         count("All cities, region",              City.getByRegion(con,"North America", 0));
@@ -36,31 +50,50 @@ public class App
         show("Top N cities (5), country",        City.getByCountry(con,"Germany", 5));
         show("Top N cities (4), district",       City.getByDistrict(con,"Inner Mongolia", 4));
 
-        count("All cities, world",               CapitalCity.getCountries(con,0));
-        count("All cities, continent",           CapitalCity.getContinent(con,"Europe", 0));
-        count("All cities, region",              CapitalCity.getRegion(con,"North America", 0));
+        // Capital cities reports
+        count("All capital cities, world",               CapitalCity.getCountries(con,0));
+        count("All capital cities, continent",           CapitalCity.getContinent(con,"Europe", 0));
+        count("All capital cities, region",              CapitalCity.getRegion(con,"North America", 0));
 
-        show("Top N cities (5), world",         CapitalCity.getCountries(con,5));
-        show("Top N cities (4), continent",      CapitalCity.getContinent(con,"Asia",4));
-        show("Top N cities (3), region",         CapitalCity.getRegion(con,"Southern Europe", 3));
+        show("Top N capital cities (5), world",         CapitalCity.getCountries(con,5));
+        show("Top N capital cities (4), continent",      CapitalCity.getContinent(con,"Asia",4));
+        show("Top N capital cities (3), region",         CapitalCity.getRegion(con,"Southern Europe", 3));
+
+        //Number of people, people living in cities, people not living in cities
+        show("Population by continent", PopCityNoCity.getContinent(con));
+        count("Population by region", PopCityNoCity.getRegion(con));
+        count("Population by country", PopCityNoCity.getCountry(con));
 
         // Disconnect from database
         a.disconnect();
     }
-//
+    /**
+    * Prints a heading followed by every item in the list.
+    * Used for short reports (top N, continents, regions, etc).
+    *
+    * @param title
+    * @param items the report rows, "?" means any type
+     */
     private static void show(String title, ArrayList<?> items) {
         System.out.println();
         System.out.println("===" + title + " ===");
         for (Object item : items) {
-            System.out.println(item);
+            System.out.println(item); //println calls each object's toString() to decide how it looks
         }
     }
-
+    /**
+     * Print a heading, how many of the rows came back, and only the first row as we go by largest
+     * Used for long "all" reports as printing in full would be excessive. What happens instead is we count
+     * all the rows, but return only the first row.
+     *
+     * @param title
+     * @param items (the report rows)
+     */
     private static void count(String title, ArrayList<?> items) {
         System.out.println();
         System.out.println("=== " + title + ": " + items.size() + " rows ===");
         if (!items.isEmpty()) {
-            System.out.println("First: " + items.get(0));
+            System.out.println("First: " + items.get(0)); //if row isn't empty, print first row which would be largest
         }
     }
     /**
