@@ -1,27 +1,77 @@
 name: A workflow for my App
-on: push
+on:
+  push:                      # CHANGED: runs on every branch, as your old workflow did
+  pull_request:              # NEW: also runs when a pull request is opened
+
+permissions:
+  contents: write            # NEW: lets the release step create the "latest" release
 
 jobs:
   UnitTests:
-    name: Unit Test Build Action
+    name: Unit Tests
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: Set up JDK 17
+        with:
+          submodules: recursive
+      - name: Set up JDK 17            # CHANGED: name said 11, the version is 17
         uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Unit Tests
-        run: mvn -Dtest=com.napier.sem.CountryTest test
+        # CHANGED: runs every test EXCEPT the ones ending in IntegrationTest
+        run: mvn test -Dtest='!*IntegrationTest'
+      - name: CodeCov
+        uses: codecov/codecov-action@v2
+        with:
+          # token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          directory: ./target/site/jacoco
+          flags: Unit Tests # optional
+          verbose: true # optional (default = false)
 
-  Build:
-    name: Build and Start Using docker-compose
+  IntegrationTests:
+    name: Integration Tests
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Integration Tests and CodeCov
+        # NEW: the tests run on the runner, outside Docker, so they must use the
+        # mapped port on localhost instead of the default db:3306
+        env:
+          DB_URL: jdbc:mysql://localhost:33060/world?useSSL=false&allowPublicKeyRetrieval=true
+        run: |
+          docker build -t database ./db
+          docker run --name world-db -dp 33060:3306 database
+          mvn test -Dtest='*IntegrationTest'
+          docker stop world-db
+          docker rm world-db
+          docker image rm database
+      - name: CodeCov
+        uses: codecov/codecov-action@v2
+        with:
+          # token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          directory: ./target/site/jacoco
+          flags: Integration Tests # optional
+          verbose: true # optional (default = false)
+
+  build:
+    name: Build Run in Docker and Deploy Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
       - name: Set up JDK 17
         uses: actions/setup-java@v5
         with:
@@ -29,7 +79,33 @@ jobs:
           distribution: 'temurin'
       - name: Package and Run docker compose
         run: |
+          mkdir -p reports
           mvn package -DskipTests
           docker compose up --abort-on-container-exit
-      - name: view logs
-        run: docker logs set08103-app-1
+      - name: Publish reports to the reports branch
+        # NEW: copies the markdown reports the app wrote into a "reports" branch.
+        # Only runs on master, so feature branches don't overwrite it.
+        if: github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPORTS_DIR=$(mktemp -d)
+          cp -r reports/. "$REPORTS_DIR"
+          cd "$REPORTS_DIR"
+          git init -q
+          git checkout -q -b reports
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "Update reports from ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" reports
+      - name: Deploy release
+        # CHANGED: only publish the "latest" release from master, not from every branch
+        if: github.ref == 'refs/heads/master'
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          files: |
+            ./target/*.jar
