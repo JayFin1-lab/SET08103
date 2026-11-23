@@ -64,6 +64,9 @@ public class App
         count("Population by region", PopCityNoCity.getRegion(con));
         count("Population by country", PopCityNoCity.getCountry(con));
 
+        //Top N speaking country languages
+        show("Languages by number of speakers", CountryLanguage.getLanguages(con));
+
         // Disconnect from database
         a.disconnect();
     }
