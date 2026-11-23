@@ -97,7 +97,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -q -m "Update reports from ${GITHUB_SHA}"
+          git commit --allow-empty -q -m "Update reports from ${GITHUB_SHA}"
           git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" reports
       - name: Deploy release
         # CHANGED: only publish the "latest" release from master, not from every branch
